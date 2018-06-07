@@ -28,6 +28,16 @@ options(scipen = 999)
 ## Sumarizando os dados
 
 ```{r warning=FALSE}
-glimpse(vias)
+vias %>%
+    filter(!is.na(profissao)) %>% 
+    group_by(tipo_profissao) %>%
+    summarise(num_vias = n(),
+              media_km = sum(comprimento)/1000,
+              arovres_por_km = sum(arvore)/media_km,
+              bancos_por_km = sum(bancos)/media_km,
+              ponto_onibus_por_km = sum(pontoonibu)/media_km,
+              ponto_taxi_por_km = sum(pontotaxi)/media_km,
+              pontomotot = sum(pontomotot)/media_km,
+              faixas_por_km = sum(faixapedes)/media_km)
 ```
 
