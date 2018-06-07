@@ -1,0 +1,33 @@
+---
+title: "Exploração dos dados das vias-cg"
+author: "Pedro Lira"
+date: "7 de junho de 2018"
+output: html_document
+---
+```{r echo=FALSE, warning=FALSE} 
+library(tidyverse)
+library(here)
+library(viridis)
+library(colourlovers)
+library(skimr)
+
+source(here::here("code/theme_report.R"))
+source(here::here("code/read_wrangle.R"))
+source(here::here("code/import_data.R"))
+
+
+theme_set(theme_report())
+knitr::opts_chunk$set(tidy = FALSE,
+                      fig.width = 6,
+                      fig.height = 5,
+                      echo = FALSE)
+options(scipen = 999)
+
+```
+
+## Sumarizando os dados
+
+```{r warning=FALSE}
+glimpse(vias)
+```
+
