@@ -11,6 +11,7 @@ library(viridis)
 library(colourlovers)
 library(skimr)
 library(viridisLite)
+library(plotly)
 
 source(here::here("code/theme_report.R"))
 source(here::here("code/read_wrangle.R"))
@@ -29,20 +30,18 @@ options(scipen = 999)
 
 ```{r read}
 vias = read_wrangle_data()
-glimpse(vias)
-skimr::skim(vias)
 ```
 
 
 ## Sumarizando os dados
 
 ```{r warning=FALSE}
-vias %>%
+sumario_vias_prof <- vias %>%
     filter(!is.na(profissao)) %>% 
     group_by(tipo_profissao) %>%
     summarise(num_vias = n(),
-              media_km = sum(comprimento)/1000,
-              arovres_por_km = sum(arvore)/media_km,
+              media_km = (sum(comprimento)/1000)/num_vias,
+              arvores_por_km = sum(arvore)/media_km,
               bancos_por_km = sum(bancos)/media_km,
               ponto_onibus_por_km = sum(pontoonibu)/media_km,
               ponto_taxi_por_km = sum(pontotaxi)/media_km,
@@ -50,3 +49,27 @@ vias %>%
               faixas_por_km = sum(faixapedes)/media_km)
 ```
 
+```{r}
+sumario_vias_prof %>%
+    plot_ly(width = 600, height = 200) %>%
+    add_trace(type = 'parcoords',
+          line = list(color = ~tipo_profissao,
+                      showscale=TRUE,
+            dimensions = list(
+            list(range = c(~min(num_vias),~max(num_vias)),
+                 constraintrange = c(1, 100),
+                 label = '# Vias',
+                 values = ~num_vias),
+            list(range = c(~min(arvores_por_km),~max(arvores_por_km)),
+                 constraintrange = c(1, 100),
+                 label = '# Vias',
+                 values = ~arvores_por_km)
+            #list(range = c(~min(media_km),~max(media_km)),
+            #    label = 'Média de KM/Via', values = ~media_km),
+            #list(range = c(~min(arvores_por_km),~max(arvores_por_km)),
+            #     label = 'Árvores por KM/Via', values = ~arvores_por_km),
+            #list(label = 'Bancos por KM/Via', values = ~bancos_por_km)
+            )
+          )
+  )
+```
