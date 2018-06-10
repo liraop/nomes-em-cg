@@ -10,6 +10,7 @@ library(here)
 library(viridis)
 library(colourlovers)
 library(skimr)
+library(viridisLite)
 
 source(here::here("code/theme_report.R"))
 source(here::here("code/read_wrangle.R"))
@@ -24,6 +25,14 @@ knitr::opts_chunk$set(tidy = FALSE,
 options(scipen = 999)
 
 ```
+
+
+```{r read}
+vias = read_wrangle_data()
+glimpse(vias)
+skimr::skim(vias)
+```
+
 
 ## Sumarizando os dados
 
